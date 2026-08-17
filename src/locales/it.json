@@ -1,0 +1,77 @@
+{
+  "app": {
+    "title": "Albero Genealogico",
+    "tagline": "Il tuo albero di famiglia, conservato sul tuo dispositivo.",
+    "untitledTree": "Albero senza nome",
+    "treeNamePlaceholder": "Nome di questo albero"
+  },
+  "empty": {
+    "title": "Inizia il tuo albero",
+    "body": "Comincia da una coppia — dei nonni, oppure i tuoi genitori. Potrai sempre aggiungere generazioni sopra e sotto in seguito.",
+    "father": "Prima persona",
+    "mother": "Partner",
+    "firstName": "Nome",
+    "surname": "Cognome",
+    "create": "Crea albero",
+    "or": "oppure",
+    "import": "Importa un albero salvato"
+  },
+  "toolbar": {
+    "addParents": "Aggiungi genitori sopra",
+    "fit": "Adatta allo schermo",
+    "zoomIn": "Ingrandisci",
+    "zoomOut": "Riduci",
+    "undo": "Annulla",
+    "redo": "Ripeti",
+    "export": "Esporta",
+    "import": "Importa",
+    "reset": "Nuovo albero",
+    "language": "Lingua",
+    "menu": "Menu",
+    "stats": "{{people}} persone · {{generations}} generazioni"
+  },
+  "person": {
+    "unnamed": "Senza nome",
+    "details": "Dettagli",
+    "firstName": "Nome",
+    "surname": "Cognome",
+    "gender": "Sesso",
+    "male": "Uomo",
+    "female": "Donna",
+    "other": "Non specificato",
+    "birthDate": "Data di nascita",
+    "birthPlace": "Luogo di nascita",
+    "deathDate": "Data di morte",
+    "lifeNotes": "Note sulla vita",
+    "deathNotes": "Note sulla morte",
+    "dateHint": "Una data completa o solo l'anno — 1923, 12/05/1923, circa 1923",
+    "lifeNotesHint": "Lavoro, luoghi, carattere, storie da non perdere.",
+    "deathNotesHint": "Visibile perché è stata inserita una data di morte.",
+    "living": "In vita",
+    "deceased": "Deceduto",
+    "lived": "{{years}} anni",
+    "surnameColor": "Colore per «{{surname}}»",
+    "surnameColorHint": "Tutti con questo cognome condividono questo colore.",
+    "autoColor": "Automatico",
+    "close": "Chiudi",
+    "delete": "Elimina questa persona",
+    "deleteConfirmSingle": "Eliminare {{name}}?",
+    "genderHint": "Indicare quale partner è uomo determina il cognome che erediteranno i figli.",
+    "deleteConfirm_one": "Eliminare {{name}} e il suo unico discendente? L'operazione è reversibile solo con Annulla.",
+    "deleteConfirm_other": "Eliminare {{name}} e tutti i {{count}} discendenti? L'operazione è reversibile solo con Annulla."
+  },
+  "actions": {
+    "addPartner": "Aggiungi partner",
+    "addChild": "Aggiungi figlio",
+    "focus": "Apri"
+  },
+  "io": {
+    "exported": "Albero esportato",
+    "importFailed": "Impossibile leggere il file come esportazione di Albero Genealogico.",
+    "importConfirm": "Sostituire l'albero attuale con quello importato? L'albero attuale andrà perso se non è stato esportato.",
+    "resetConfirm": "Eliminare questo albero e ricominciare? Esportalo prima se vuoi conservarlo."
+  },
+  "install": {
+    "hint": "Suggerimento: usa «Aggiungi alla schermata Home» del browser per tenere l'app a portata di tocco, anche offline."
+  }
+}
