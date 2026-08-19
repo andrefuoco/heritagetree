@@ -13,7 +13,8 @@ export function DetailPanel({ person }: { person: Person }) {
   const updatePerson = useStore((s) => s.updatePerson);
   const removePerson = useStore((s) => s.removePerson);
   const setSurnameHue = useStore((s) => s.setSurnameHue);
-  const select = useStore((s) => s.select);
+  const clearSelection = useStore((s) => s.clearSelection);
+  const addParentsTo = useStore((s) => s.addParentsTo);
 
   const deceased = !!person.deathDate.trim();
   const tone = toneForSurname(person.surname, deceased, doc.surnameColors);
@@ -51,7 +52,7 @@ export function DetailPanel({ person }: { person: Person }) {
         <button
           type="button"
           className="btn btn--icon"
-          onClick={() => select(null)}
+          onClick={clearSelection}
           aria-label={t('person.close')}
         >
           ✕
@@ -190,6 +191,15 @@ export function DetailPanel({ person }: { person: Person }) {
         )}
 
         <div className="panel__section">
+          {/* Anyone lacking parents can be grown upwards from, not just the
+              person the tree is rooted at. */}
+          {!person.parentUnionId ? (
+            <button type="button" className="btn" onClick={() => addParentsTo(person.id)}>
+              ↑ {t('person.addParents')}
+            </button>
+          ) : (
+            <p className="field__hint">{t('person.parentsKnown')}</p>
+          )}
           <button type="button" className="btn btn--danger" onClick={onDelete}>
             {t('person.delete')}
           </button>

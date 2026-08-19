@@ -40,7 +40,7 @@ export function useViewport() {
 
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement;
-    if (target.closest('.card, .chip, .panel')) return;
+    if (target.closest('.card, .chip, .union, .panel')) return;
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (pointers.current.size === 1) {
       setPanning(true);

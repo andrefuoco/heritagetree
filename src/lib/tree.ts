@@ -58,17 +58,31 @@ export function countPeople(doc: TreeDocument): number {
   return Object.keys(doc.people).length;
 }
 
+/**
+ * How many generations the tree spans. Walks partners and parents as well as
+ * children, because a spouse's ancestors sit above the root's own generation
+ * and would otherwise go uncounted.
+ */
 export function generationCount(doc: TreeDocument): number {
-  if (!doc.rootPersonId) return 0;
-  let max = 0;
-  const walk = (id: ID, depth: number, seen: Set<ID>) => {
-    if (seen.has(id)) return;
-    seen.add(id);
-    max = Math.max(max, depth);
+  if (!doc.rootPersonId || !doc.people[doc.rootPersonId]) return 0;
+  const depths = new Map<ID, number>([[doc.rootPersonId, 0]]);
+  const queue: ID[] = [doc.rootPersonId];
+  while (queue.length > 0) {
+    const id = queue.shift()!;
+    const depth = depths.get(id)!;
+    const visit = (other: ID, otherDepth: number) => {
+      if (depths.has(other) || !doc.people[other]) return;
+      depths.set(other, otherDepth);
+      queue.push(other);
+    };
     for (const union of unionsOf(doc, id)) {
-      for (const childId of union.childIds) walk(childId, depth + 1, seen);
+      for (const partnerId of union.partnerIds) visit(partnerId, depth);
+      for (const childId of union.childIds) visit(childId, depth + 1);
     }
-  };
-  walk(doc.rootPersonId, 1, new Set());
-  return max;
+    const parentUnionId = doc.people[id]?.parentUnionId;
+    const parentUnion = parentUnionId ? doc.unions[parentUnionId] : undefined;
+    for (const parentId of parentUnion?.partnerIds ?? []) visit(parentId, depth - 1);
+  }
+  const values = [...depths.values()];
+  return Math.max(...values) - Math.min(...values) + 1;
 }

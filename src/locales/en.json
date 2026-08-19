@@ -17,7 +17,6 @@
     "import": "Import a saved tree"
   },
   "toolbar": {
-    "addParents": "Add parents above",
     "fit": "Fit to screen",
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
@@ -58,7 +57,9 @@
     "deleteConfirmSingle": "Delete {{name}}?",
     "genderHint": "Marking one partner as male sets which surname their children inherit.",
     "deleteConfirm_one": "Delete {{name}} and their one descendant? This cannot be undone except with Undo.",
-    "deleteConfirm_other": "Delete {{name}} and all {{count}} descendants? This cannot be undone except with Undo."
+    "deleteConfirm_other": "Delete {{name}} and all {{count}} descendants? This cannot be undone except with Undo.",
+    "addParents": "Add parents",
+    "parentsKnown": "Their parents are already in the tree."
   },
   "actions": {
     "addPartner": "Add partner",
@@ -73,5 +74,15 @@
   },
   "install": {
     "hint": "Tip: use your browser's “Add to Home screen” to keep this app one tap away, offline."
+  },
+  "union": {
+    "title": "Couple",
+    "explainer": "Children belong to the couple. Add them here and they appear on the line below, as brothers and sisters.",
+    "marriageDate": "Date of marriage",
+    "notes": "Notes on the couple",
+    "children": "Children",
+    "childCount_one": "1 child",
+    "childCount_other": "{{count}} children",
+    "noChildren": "No children yet"
   }
 }

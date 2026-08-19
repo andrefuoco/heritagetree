@@ -10,7 +10,8 @@
   --accent: #7a5c3e;
   --accent-contrast: #fffdf8;
   --danger: #a8412f;
-  --link: #b9b1a0;
+  --link: #c2baa9;
+  --link-strong: #8a7f6a;
   --shadow: 0 1px 2px rgba(43, 40, 34, 0.08), 0 4px 12px rgba(43, 40, 34, 0.06);
   --radius: 10px;
   color-scheme: light;
@@ -30,6 +31,7 @@
     --accent-contrast: #1b1a17;
     --danger: #e08672;
     --link: #55524a;
+    --link-strong: #8b8474;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 14px rgba(0, 0, 0, 0.3);
     color-scheme: dark;
   }
@@ -618,3 +620,69 @@ button, input, select, textarea {
   .toolbar { gap: 6px; padding: 8px 10px; }
   .toolbar__name { flex: 1 1 90px; font-size: 13px; }
 }
+
+/* ---------- union node ---------- */
+
+/*
+ * The couple itself, drawn on the canvas as a knot between the two boxes.
+ * Every descent line starts here and nothing else does, which is what keeps a
+ * spouse from reading as a sibling.
+ */
+.union {
+  position: absolute;
+  padding: 0;
+  border-radius: 50%;
+  border: 2.5px solid var(--link-strong);
+  background: var(--surface);
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.12s, border-color 0.12s, background 0.12s;
+  z-index: 2;
+}
+.union::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--link-strong);
+  transition: background 0.12s;
+}
+.union:hover {
+  transform: scale(1.22);
+  border-color: var(--accent);
+}
+.union:hover::after { background: var(--accent); }
+.union--selected {
+  border-color: var(--accent);
+  transform: scale(1.22);
+  outline: 2.5px solid var(--accent);
+  outline-offset: 3px;
+}
+.union--selected::after { background: var(--accent); }
+
+.union__actions {
+  position: absolute;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+.panel__swatch--union { background: var(--link-strong); }
+
+.linklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.linklist button {
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  border-radius: 999px;
+  padding: 5px 11px;
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+}
+.linklist button:hover { border-color: var(--accent); background: var(--surface); }

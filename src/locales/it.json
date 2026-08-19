@@ -17,7 +17,6 @@
     "import": "Importa un albero salvato"
   },
   "toolbar": {
-    "addParents": "Aggiungi genitori sopra",
     "fit": "Adatta allo schermo",
     "zoomIn": "Ingrandisci",
     "zoomOut": "Riduci",
@@ -58,7 +57,9 @@
     "deleteConfirmSingle": "Eliminare {{name}}?",
     "genderHint": "Indicare quale partner è uomo determina il cognome che erediteranno i figli.",
     "deleteConfirm_one": "Eliminare {{name}} e il suo unico discendente? L'operazione è reversibile solo con Annulla.",
-    "deleteConfirm_other": "Eliminare {{name}} e tutti i {{count}} discendenti? L'operazione è reversibile solo con Annulla."
+    "deleteConfirm_other": "Eliminare {{name}} e tutti i {{count}} discendenti? L'operazione è reversibile solo con Annulla.",
+    "addParents": "Aggiungi genitori",
+    "parentsKnown": "I suoi genitori sono già nell’albero."
   },
   "actions": {
     "addPartner": "Aggiungi partner",
@@ -73,5 +74,15 @@
   },
   "install": {
     "hint": "Suggerimento: usa «Aggiungi alla schermata Home» del browser per tenere l'app a portata di tocco, anche offline."
+  },
+  "union": {
+    "title": "Coppia",
+    "explainer": "I figli appartengono alla coppia. Aggiungili qui e compariranno sulla linea sottostante, come fratelli e sorelle.",
+    "marriageDate": "Data di matrimonio",
+    "notes": "Note sulla coppia",
+    "children": "Figli",
+    "childCount_one": "1 figlio",
+    "childCount_other": "{{count}} figli",
+    "noChildren": "Nessun figlio"
   }
 }

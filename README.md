@@ -19,7 +19,16 @@ Activity without a rewrite.
 ## Features
 
 - Couples, their children, and unlimited generations below.
-- Grow the tree upwards: **Add parents above** puts a new couple over the root.
+- **Grow the tree upwards from anybody.** Open a person who has no parents yet
+  and *Add parents* puts a couple above them — not only above the person the
+  tree happens to be rooted at, so a married-in spouse gets their own line, and
+  their siblings appear alongside them.
+- **The couple is a thing you can click.** Every marriage is drawn as a node
+  between the two boxes; select it to add children, or to record the marriage
+  date and notes.
+- Marriage and descent are drawn in two deliberately different languages — a
+  short heavy bar through the couple's node versus lighter lines that always
+  start *at* that node — so a spouse can never be mistaken for a sibling.
 - Second marriages and single parents.
 - Click anyone to open their card: dates of birth and death, place of birth,
   notes on their life, and — once a date of death is entered — notes on their
@@ -44,6 +53,18 @@ Activity without a rewrite.
 npm install
 npm run dev
 ```
+
+## Tests
+
+```bash
+npm test
+```
+
+The layout engine is pure geometry, so it is tested directly in node with no
+browser: every descent line must land on the centre of the box it points at, no
+two boxes may overlap, and everybody in the document must be drawn exactly once
+— checked across lone children, wide sibling groups, remarriages, spouses with
+their own ancestors, and a hundred-person tree.
 
 ## Deploying to GitHub Pages
 
@@ -92,11 +113,27 @@ Person { id, firstName, surname, gender, birthDate, deathDate, notes…, parentU
 Union  { id, partnerIds[], childIds[], marriageDate, notes }
 ```
 
-That is what makes remarriage, single parents and "add a couple above the root"
-all fall out of one code path instead of three special cases.
+That is what makes remarriage, single parents and adding a couple above anybody
+all fall out of one code path instead of three special cases. It is also why the
+couple is clickable in the UI: children belong to it, so it is the only
+unambiguous place to add them once somebody has married twice.
 
-`src/lib/layout.ts` turns that into coordinates. Each person is laid out with
-their partners in a row and their descendants beneath; a couple is centred over
-its children's *anchor points* rather than over their bounding box, so a lone
-child sits directly under its parents instead of being pushed aside by its own
-spouse and descendants.
+`src/lib/layout.ts` turns that into coordinates, in two passes.
+
+The first walks down from the root: each person is laid out with their partners
+in a row and their descendants beneath, and a couple is centred over its
+children's *anchor points* rather than over their bounding box, so a lone child
+sits directly under its parents instead of being pushed aside by its own spouse
+and descendants.
+
+The second grows the tree upwards. Anyone on the canvas may have parents of
+their own — not just the root — so their ancestors are laid out as a separate
+block and slotted into the nearest gap above them, repeating generation by
+generation until nobody is left with undrawn parents. Blocks therefore track the
+horizontal space they occupy *per generation* rather than as one overall width,
+which is what lets a spouse's parents drop in beside an existing branch instead
+of being pushed clear of the whole tree.
+
+Finally, children's bars are assigned lanes: two couples whose bars would span
+overlapping ground are drawn at different heights, so they never run together
+into what looks like a single line.

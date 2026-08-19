@@ -4,6 +4,7 @@ import { useStore } from './store';
 import { useViewport } from './hooks/useViewport';
 import { TreeCanvas } from './components/TreeCanvas';
 import { DetailPanel } from './components/DetailPanel';
+import { UnionPanel } from './components/UnionPanel';
 import { Toolbar } from './components/Toolbar';
 import { EmptyState } from './components/EmptyState';
 import { NODE_H, NODE_W, type Layout } from './lib/layout';
@@ -24,11 +25,12 @@ export default function App() {
   const init = useStore((s) => s.init);
   const loaded = useStore((s) => s.loaded);
   const doc = useStore((s) => s.doc);
-  const selectedPersonId = useStore((s) => s.selectedPersonId);
-  const selectedPerson = selectedPersonId ? doc.people[selectedPersonId] : undefined;
+  const selection = useStore((s) => s.selection);
+  const selectedPerson = selection?.kind === 'person' ? doc.people[selection.id] : undefined;
+  const selectedUnion = selection?.kind === 'union' ? doc.unions[selection.id] : undefined;
   const undo = useStore((s) => s.undo);
   const redo = useStore((s) => s.redo);
-  const select = useStore((s) => s.select);
+  const clearSelection = useStore((s) => s.clearSelection);
 
   const { stageRef, viewport, panning, fit, zoomBy, ensureVisible, handlers } = useViewport();
   const [layout, setLayout] = useState<Layout | null>(null);
@@ -55,8 +57,8 @@ export default function App() {
   // Keep the focused person clear of the detail panel, which on wide screens
   // covers the right edge of the stage and on phones the bottom of it.
   useEffect(() => {
-    if (!selectedPersonId) return;
-    const placed = layout?.personById.get(selectedPersonId);
+    if (selection?.kind !== 'person') return;
+    const placed = layout?.personById.get(selection.id);
     if (!placed) return;
     const narrow = window.innerWidth <= 640;
     ensureVisible(
@@ -65,13 +67,13 @@ export default function App() {
       // bottom sheet needs an inset reserved.
       narrow ? { bottom: window.innerHeight * 0.72 } : {},
     );
-  }, [selectedPersonId, layout, ensureVisible]);
+  }, [selection, layout, ensureVisible]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null;
       const typing = !!target?.closest('input, textarea, select');
-      if (e.key === 'Escape' && !typing) select(null);
+      if (e.key === 'Escape' && !typing) clearSelection();
       if (!(e.metaKey || e.ctrlKey)) return;
       if (e.key.toLowerCase() !== 'z') return;
       e.preventDefault();
@@ -80,7 +82,7 @@ export default function App() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [undo, redo, select]);
+  }, [undo, redo, clearSelection]);
 
   const onFit = useCallback(() => {
     const current = layoutRef.current;
@@ -106,6 +108,7 @@ export default function App() {
             onLayout={setLayout}
           />
           {selectedPerson && <DetailPanel key={selectedPerson.id} person={selectedPerson} />}
+          {selectedUnion && <UnionPanel key={selectedUnion.id} union={selectedUnion} />}
         </div>
       )}
       {showHint && (

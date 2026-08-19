@@ -14,7 +14,6 @@ export function Toolbar({ onFit, onZoom }: Props) {
   const { t, i18n } = useTranslation();
   const doc = useStore((s) => s.doc);
   const setTreeName = useStore((s) => s.setTreeName);
-  const addParentsToRoot = useStore((s) => s.addParentsToRoot);
   const replaceDocument = useStore((s) => s.replaceDocument);
   const resetTree = useStore((s) => s.resetTree);
   const undo = useStore((s) => s.undo);
@@ -73,19 +72,6 @@ export function Toolbar({ onFit, onZoom }: Props) {
       />
 
       <div className="toolbar__spacer" />
-
-      <div className="toolbar__group">
-        <button
-          type="button"
-          className="btn"
-          onClick={addParentsToRoot}
-          disabled={!doc.rootPersonId}
-          title={t('toolbar.addParents')}
-          aria-label={t('toolbar.addParents')}
-        >
-          ↑<span className="btn__label"> {t('toolbar.addParents')}</span>
-        </button>
-      </div>
 
       <div className="toolbar__group">
         <button type="button" className="btn btn--icon" onClick={() => onZoom(1 / 1.2)} aria-label={t('toolbar.zoomOut')}>−</button>

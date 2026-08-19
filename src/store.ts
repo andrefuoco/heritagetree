@@ -7,21 +7,26 @@ import { unionsOf } from './lib/layout';
 
 const HISTORY_LIMIT = 50;
 
+/** What the detail panel is showing: a person, a couple, or nothing. */
+export type Selection = { kind: 'person'; id: ID } | { kind: 'union'; id: ID } | null;
+
 interface State {
   doc: TreeDocument;
   loaded: boolean;
-  selectedPersonId: ID | null;
+  selection: Selection;
   past: TreeDocument[];
   future: TreeDocument[];
 
   init: () => Promise<void>;
-  select: (id: ID | null) => void;
+  selectPerson: (id: ID) => void;
+  selectUnion: (id: ID) => void;
+  clearSelection: () => void;
 
   startTree: (father: Partial<Person>, mother: Partial<Person>) => void;
   addPartner: (personId: ID) => ID;
   addChild: (unionId: ID) => ID;
   addChildToPerson: (personId: ID) => ID;
-  addParentsToRoot: () => void;
+  addParentsTo: (personId: ID) => void;
   updatePerson: (id: ID, patch: Partial<Person>) => void;
   updateUnion: (id: ID, patch: Partial<Union>) => void;
   removePerson: (id: ID) => void;
@@ -61,7 +66,7 @@ export const useStore = create<State>((set, get) => {
   return {
     doc: createDocument(),
     loaded: false,
-    selectedPersonId: null,
+    selection: null,
     past: [],
     future: [],
 
@@ -70,7 +75,9 @@ export const useStore = create<State>((set, get) => {
       set({ doc: stored ?? createDocument(), loaded: true });
     },
 
-    select: (id) => set({ selectedPersonId: id }),
+    selectPerson: (id) => set({ selection: { kind: 'person', id } }),
+    selectUnion: (id) => set({ selection: { kind: 'union', id } }),
+    clearSelection: () => set({ selection: null }),
 
     startTree: (father, mother) =>
       mutate((d) => {
@@ -94,7 +101,7 @@ export const useStore = create<State>((set, get) => {
         const unionId = newId();
         d.unions[unionId] = emptyUnion(unionId, { partnerIds: [personId, id] });
       });
-      set({ selectedPersonId: id });
+      set({ selection: { kind: 'person', id } });
       return id;
     },
 
@@ -109,7 +116,7 @@ export const useStore = create<State>((set, get) => {
         });
         union.childIds.push(id);
       });
-      set({ selectedPersonId: id });
+      set({ selection: { kind: 'person', id } });
       return id;
     },
 
@@ -132,31 +139,38 @@ export const useStore = create<State>((set, get) => {
         });
         d.unions[unionId].childIds.push(childId);
       });
-      set({ selectedPersonId: childId });
+      set({ selection: { kind: 'person', id: childId } });
       return childId;
     },
 
     /**
-     * Grows the tree upwards: the current root becomes the child of a new
-     * couple, and the new father becomes the root.
+     * Grows the tree upwards from anybody who has no parents yet — not only
+     * the person the tree happens to be rooted at, so a married-in spouse can
+     * have their own line drawn above them.
      */
-    addParentsToRoot: () =>
+    addParentsTo: (personId) => {
+      let fatherId = '';
       mutate((d) => {
-        const rootId = d.rootPersonId;
-        const root = rootId ? d.people[rootId] : undefined;
-        if (!rootId || !root) return;
-        const fatherId = newId();
+        const person = d.people[personId];
+        if (!person || person.parentUnionId) return;
+        fatherId = newId();
         const motherId = newId();
         const unionId = newId();
-        d.people[fatherId] = emptyPerson(fatherId, { gender: 'male', surname: root.surname });
+        // A father and his child usually share a surname, and in the Italian
+        // convention so does a married woman's father, so seed both from the
+        // person we are growing upwards from.
+        d.people[fatherId] = emptyPerson(fatherId, { gender: 'male', surname: person.surname });
         d.people[motherId] = emptyPerson(motherId, { gender: 'female' });
         d.unions[unionId] = emptyUnion(unionId, {
           partnerIds: [fatherId, motherId],
-          childIds: [rootId],
+          childIds: [personId],
         });
-        root.parentUnionId = unionId;
-        d.rootPersonId = fatherId;
-      }),
+        person.parentUnionId = unionId;
+        // Keep the main lineage rooted at the top so it stays the tree's spine.
+        if (d.rootPersonId === personId) d.rootPersonId = fatherId;
+      });
+      if (fatherId) set({ selection: { kind: 'person', id: fatherId } });
+    },
 
     updatePerson: (id, patch) =>
       mutate((d) => {
@@ -187,7 +201,8 @@ export const useStore = create<State>((set, get) => {
           d.rootPersonId = Object.keys(d.people)[0] ?? null;
         }
       });
-      if (get().selectedPersonId === id) set({ selectedPersonId: null });
+      const selection = get().selection;
+      if (selection?.kind === 'person' && selection.id === id) set({ selection: null });
     },
 
     setSurnameHue: (surname, hue) =>
@@ -210,7 +225,7 @@ export const useStore = create<State>((set, get) => {
         d.surnameColors = migrated.surnameColors;
         d.name = migrated.name;
       });
-      set({ selectedPersonId: null });
+      set({ selection: null });
     },
 
     resetTree: () => {
@@ -221,7 +236,7 @@ export const useStore = create<State>((set, get) => {
         d.surnameColors = {};
         d.name = '';
       });
-      set({ selectedPersonId: null });
+      set({ selection: null });
     },
 
     undo: () => {
