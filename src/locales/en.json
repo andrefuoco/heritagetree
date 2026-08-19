@@ -1,0 +1,77 @@
+{
+  "app": {
+    "title": "Heritage Tree",
+    "tagline": "Your family tree, kept on your own device.",
+    "untitledTree": "Untitled tree",
+    "treeNamePlaceholder": "Name of this tree"
+  },
+  "empty": {
+    "title": "Start your tree",
+    "body": "Begin with a couple — a set of grandparents, or your own parents. You can always add generations above and below later.",
+    "father": "First person",
+    "mother": "Their partner",
+    "firstName": "First name",
+    "surname": "Surname",
+    "create": "Create tree",
+    "or": "or",
+    "import": "Import a saved tree"
+  },
+  "toolbar": {
+    "addParents": "Add parents above",
+    "fit": "Fit to screen",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "undo": "Undo",
+    "redo": "Redo",
+    "export": "Export",
+    "import": "Import",
+    "reset": "New tree",
+    "language": "Language",
+    "menu": "Menu",
+    "stats": "{{people}} people · {{generations}} generations"
+  },
+  "person": {
+    "unnamed": "Unnamed",
+    "details": "Details",
+    "firstName": "First name",
+    "surname": "Surname",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "other": "Unspecified",
+    "birthDate": "Date of birth",
+    "birthPlace": "Place of birth",
+    "deathDate": "Date of death",
+    "lifeNotes": "Notes on their life",
+    "deathNotes": "Notes on their death",
+    "dateHint": "A full date or just a year — 1923, 12/05/1923, about 1923",
+    "lifeNotesHint": "Work, places lived, character, stories worth keeping.",
+    "deathNotesHint": "Shown because a date of death has been entered.",
+    "living": "Living",
+    "deceased": "Deceased",
+    "lived": "{{years}} years",
+    "surnameColor": "Colour for “{{surname}}”",
+    "surnameColorHint": "Everyone with this surname shares this colour.",
+    "autoColor": "Automatic",
+    "close": "Close",
+    "delete": "Delete this person",
+    "deleteConfirmSingle": "Delete {{name}}?",
+    "genderHint": "Marking one partner as male sets which surname their children inherit.",
+    "deleteConfirm_one": "Delete {{name}} and their one descendant? This cannot be undone except with Undo.",
+    "deleteConfirm_other": "Delete {{name}} and all {{count}} descendants? This cannot be undone except with Undo."
+  },
+  "actions": {
+    "addPartner": "Add partner",
+    "addChild": "Add child",
+    "focus": "Focus"
+  },
+  "io": {
+    "exported": "Tree exported",
+    "importFailed": "That file could not be read as a Heritage Tree export.",
+    "importConfirm": "Replace the current tree with the imported one? Your current tree will be lost unless you exported it.",
+    "resetConfirm": "Delete this tree and start over? Export it first if you want to keep it."
+  },
+  "install": {
+    "hint": "Tip: use your browser's “Add to Home screen” to keep this app one tap away, offline."
+  }
+}
